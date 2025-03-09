@@ -2,10 +2,15 @@ import fs from "fs";
 // import { promises as fsPromises } from 'fs';
 import path from "path";
 import util from "util";
-import { fileURLToPath } from "url";
+// import { fileURLToPath } from "url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+
+// Default values for logger
+let logDir = path.join(process.cwd(), "wow-logs"); // Default log directory
+let logFileName = "app.log"; // Default log file name
+let logFilePath = path.join(logDir, logFileName); // Full path
 
 const logLevels = {
   debug: 0,
@@ -21,26 +26,33 @@ let logFormat = (level, message) => `[${new Date().toISOString()}] [${level.toUp
 let logContext = {}; // Object to store log context data (e.g. user ID, request ID)
 let loggingPaused = false; // Flag to pause logging
 let autoFunctionName = false; // Flag to include function name in log messages
-let silentErrors = false; // Flag to suppress errors
-let logToFile = true; // Flag to enable file logging
+let silentErrors = false; // Flag to suppress errors during logging operations, by default false (throw errors)
 let logToConsole = true; // Flag to enable console logging
-let logFilePath = path.join(__dirname, "logs", "wow.log"); // Default log file path
+let logToFile = true; // Flag to enable file logging by default
 let logRotationSize = 5 * 1024 * 1024; // Default log rotation size (5MB)
 let customTransports = {}; // Object to store custom transports (e.g. logstash, sentry)
 
 // Function to ensure log directory exists
 const ensureLogDirExists = () => {
-  const logDir = path.dirname(logFilePath);
+  // const logDir = path.dirname(logFilePath);
   if (!fs.existsSync(logDir)) {
     fs.mkdirSync(logDir, { recursive: true });
   }
 };
 
-// Function to rotate logs
-const rotateLogs = () => {
-  if (fs.existsSync(logFilePath) && fs.statSync(logFilePath).size >= logRotationSize) {
-    const rotatedFilePath = `${logFilePath}.${Date.now()}`;
-    fs.renameSync(logFilePath, rotatedFilePath);
+// Rotate logs if size exceeds limit
+const rotateLogs = (logRotationSize = 1024 * 1024) => { // Default: 1MB
+  if (fs.existsSync(logFilePath)) {
+    const stats = fs.statSync(logFilePath);
+    if (stats.size >= logRotationSize) {
+      const timestamp = new Date()
+        .toISOString()
+        .replace(/[-T:]/g, "-")
+        .split(".")[0]; // Format: YYYY-MM-DD-HH-MM-SS
+      const rotatedLogPath = path.join(logDir, `${path.parse(logFileName).name}-${timestamp}.log`);
+
+      fs.renameSync(logFilePath, rotatedLogPath);
+    }
   }
 };
 
@@ -130,7 +142,10 @@ const wowLog = {
   enableFileLogging: (enabled) => { logToFile = enabled; },
   enableConsoleLogging: (enabled) => { logToConsole = enabled; },
   setLogFilePath: (filePath) => {
-    logFilePath = filePath;
+    const userProvidedPath = path.resolve(filePath);
+    logDir = path.dirname(userProvidedPath);
+    logFileName = path.basename(userProvidedPath);
+    logFilePath = userProvidedPath;
     ensureLogDirExists();
   },
   setSilentErrors: (silent) => { silentErrors = silent; },
