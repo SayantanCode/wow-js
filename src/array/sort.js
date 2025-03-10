@@ -1,219 +1,219 @@
-// Bubble sort algorithm
-export const bubbleSort = (arr, order) => {
-  order = order.toString().toLowerCase();
-  for (let i = 0; i < arr.length; i++) {
-    for (let j = 0; j < arr.length - i - 1; j++) {
-      if (
-        order === "asc" || order === "1"
-          ? arr[j] > arr[j + 1]
-          : arr[j] < arr[j + 1]
-      ) {
-        let temp = arr[j];
-        arr[j] = arr[j + 1];
-        arr[j + 1] = temp;
-      }
-    }
-  }
-  return arr;
-};
+// // Bubble sort algorithm
+// export const bubbleSort = (arr, order) => {
+//   order = order.toString().toLowerCase();
+//   for (let i = 0; i < arr.length; i++) {
+//     for (let j = 0; j < arr.length - i - 1; j++) {
+//       if (
+//         order === "asc" || order === "1"
+//           ? arr[j] > arr[j + 1]
+//           : arr[j] < arr[j + 1]
+//       ) {
+//         let temp = arr[j];
+//         arr[j] = arr[j + 1];
+//         arr[j + 1] = temp;
+//       }
+//     }
+//   }
+//   return arr;
+// };
 
-// Selection sort algorithm
-export const selectionSort = (arr, order) => {
-  order = order.toString().toLowerCase();
-  for (let i = 0; i < arr.length; i++) {
-    let minIndex = i;
-    for (let j = i + 1; j < arr.length; j++) {
-      if (
-        order === "asc" || order === "1"
-          ? arr[j] < arr[minIndex]
-          : arr[j] > arr[minIndex]
-      ) {
-        minIndex = j;
-      }
-    }
-    if (minIndex !== i) {
-      let temp = arr[i];
-      arr[i] = arr[minIndex];
-      arr[minIndex] = temp;
-    }
-  }
-  return arr;
-};
+// // Selection sort algorithm
+// export const selectionSort = (arr, order) => {
+//   order = order.toString().toLowerCase();
+//   for (let i = 0; i < arr.length; i++) {
+//     let minIndex = i;
+//     for (let j = i + 1; j < arr.length; j++) {
+//       if (
+//         order === "asc" || order === "1"
+//           ? arr[j] < arr[minIndex]
+//           : arr[j] > arr[minIndex]
+//       ) {
+//         minIndex = j;
+//       }
+//     }
+//     if (minIndex !== i) {
+//       let temp = arr[i];
+//       arr[i] = arr[minIndex];
+//       arr[minIndex] = temp;
+//     }
+//   }
+//   return arr;
+// };
 
-// Insertion sort algorithm
-export const insertionSort = (arr, order) => {
-  order = order.toString().toLowerCase();
-  for (let i = 1; i < arr.length; i++) {
-    let j = i;
-    while (
-      j > 0 &&
-      (order === "asc" || order === "1"
-        ? arr[j] < arr[j - 1]
-        : arr[j] > arr[j - 1])
-    ) {
-      let temp = arr[j];
-      arr[j] = arr[j - 1];
-      arr[j - 1] = temp;
-      j--;
-    }
-  }
-  return arr;
-};
+// // Insertion sort algorithm
+// export const insertionSort = (arr, order) => {
+//   order = order.toString().toLowerCase();
+//   for (let i = 1; i < arr.length; i++) {
+//     let j = i;
+//     while (
+//       j > 0 &&
+//       (order === "asc" || order === "1"
+//         ? arr[j] < arr[j - 1]
+//         : arr[j] > arr[j - 1])
+//     ) {
+//       let temp = arr[j];
+//       arr[j] = arr[j - 1];
+//       arr[j - 1] = temp;
+//       j--;
+//     }
+//   }
+//   return arr;
+// };
 
-// Shell sort algorithm
-export const shellSort = (arr, order) => {
-  order = order.toString().toLowerCase();
-  for (let gap = Math.floor(arr.length / 2); gap > 0; gap /= 2) {
-    for (let i = gap; i < arr.length; i += 1) {
-      let j = i;
-      let temp = arr[i];
-      while (
-        j >= gap &&
-        (order === "asc" || order === "1"
-          ? arr[j - gap] > temp
-          : arr[j - gap] < temp)
-      ) {
-        arr[j] = arr[j - gap];
-        j -= gap;
-      }
-      arr[j] = temp;
-    }
-  }
-  return arr;
-};
+// // Shell sort algorithm
+// export const shellSort = (arr, order) => {
+//   order = order.toString().toLowerCase();
+//   for (let gap = Math.floor(arr.length / 2); gap > 0; gap /= 2) {
+//     for (let i = gap; i < arr.length; i += 1) {
+//       let j = i;
+//       let temp = arr[i];
+//       while (
+//         j >= gap &&
+//         (order === "asc" || order === "1"
+//           ? arr[j - gap] > temp
+//           : arr[j - gap] < temp)
+//       ) {
+//         arr[j] = arr[j - gap];
+//         j -= gap;
+//       }
+//       arr[j] = temp;
+//     }
+//   }
+//   return arr;
+// };
 
-// Quick sort algorithm
-export const quickSort = (arr, order) => {
-  order = order.toString().toLowerCase();
-  if (arr.length > 1) {
-    const pivot = arr[arr.length - 1];
-    const left = [];
-    const right = [];
-    for (let i = 0; i < arr.length - 1; i++) {
-      if (order === "asc" || order === "1" ? arr[i] < pivot : arr[i] > pivot) {
-        left.push(arr[i]);
-      } else {
-        right.push(arr[i]);
-      }
-    }
-    return [...quickSort(left, order), pivot, ...quickSort(right, order)];
-  } else {
-    return arr;
-  }
-};
+// // Quick sort algorithm
+// export const quickSort = (arr, order) => {
+//   order = order.toString().toLowerCase();
+//   if (arr.length > 1) {
+//     const pivot = arr[arr.length - 1];
+//     const left = [];
+//     const right = [];
+//     for (let i = 0; i < arr.length - 1; i++) {
+//       if (order === "asc" || order === "1" ? arr[i] < pivot : arr[i] > pivot) {
+//         left.push(arr[i]);
+//       } else {
+//         right.push(arr[i]);
+//       }
+//     }
+//     return [...quickSort(left, order), pivot, ...quickSort(right, order)];
+//   } else {
+//     return arr;
+//   }
+// };
 
-// Heap sort algorithm
-export const heapSort = (arr, order) => {
-  order = order.toString().toLowerCase();
-  const n = arr.length;
-  for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
-    heapify(arr, n, i, order);
-  }
-  for (let i = n - 1; i >= 0; i--) {
-    const temp = arr[0];
-    arr[0] = arr[i];
-    arr[i] = temp;
-    heapify(arr, i, 0, order);
-  }
-  return arr;
-};
+// // Heap sort algorithm
+// export const heapSort = (arr, order) => {
+//   order = order.toString().toLowerCase();
+//   const n = arr.length;
+//   for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+//     heapify(arr, n, i, order);
+//   }
+//   for (let i = n - 1; i >= 0; i--) {
+//     const temp = arr[0];
+//     arr[0] = arr[i];
+//     arr[i] = temp;
+//     heapify(arr, i, 0, order);
+//   }
+//   return arr;
+// };
 
-const heapify = (arr, n, i, order) => {
-  let largest = i;
-  const left = 2 * i + 1;
-  const right = 2 * i + 2;
-  if (
-    order === "asc" || order === "1"
-      ? arr[left] > arr[largest]
-      : arr[left] < arr[largest]
-  ) {
-    largest = left;
-  }
-  if (
-    right < n &&
-    (order === "asc" || order === "1"
-      ? arr[right] > arr[largest]
-      : arr[right] < arr[largest])
-  ) {
-    largest = right;
-  }
-  if (largest !== i) {
-    const temp = arr[i];
-    arr[i] = arr[largest];
-    arr[largest] = temp;
-    heapify(arr, n, largest, order);
-  }
-};
+// const heapify = (arr, n, i, order) => {
+//   let largest = i;
+//   const left = 2 * i + 1;
+//   const right = 2 * i + 2;
+//   if (
+//     order === "asc" || order === "1"
+//       ? arr[left] > arr[largest]
+//       : arr[left] < arr[largest]
+//   ) {
+//     largest = left;
+//   }
+//   if (
+//     right < n &&
+//     (order === "asc" || order === "1"
+//       ? arr[right] > arr[largest]
+//       : arr[right] < arr[largest])
+//   ) {
+//     largest = right;
+//   }
+//   if (largest !== i) {
+//     const temp = arr[i];
+//     arr[i] = arr[largest];
+//     arr[largest] = temp;
+//     heapify(arr, n, largest, order);
+//   }
+// };
 
-// Counting sort algorithm
-export const countingSort = (arr, order) => {
-  order = order.toString().toLowerCase();
-  const max = Math.max(...arr);
-  const min = Math.min(...arr);
-  const count = new Array(max - min + 1).fill(0);
-  for (let i = 0; i < arr.length; i++) {
-    count[arr[i] - min]++;
-  }
-  let j = 0;
-  for (let i = 0; i < count.length; i++) {
-    while (count[i] > 0) {
-      arr[j] = i + min;
-      j++;
-      count[i]--;
-    }
-  }
-  return arr;
-};
+// // Counting sort algorithm
+// export const countingSort = (arr, order) => {
+//   order = order.toString().toLowerCase();
+//   const max = Math.max(...arr);
+//   const min = Math.min(...arr);
+//   const count = new Array(max - min + 1).fill(0);
+//   for (let i = 0; i < arr.length; i++) {
+//     count[arr[i] - min]++;
+//   }
+//   let j = 0;
+//   for (let i = 0; i < count.length; i++) {
+//     while (count[i] > 0) {
+//       arr[j] = i + min;
+//       j++;
+//       count[i]--;
+//     }
+//   }
+//   return arr;
+// };
 
-// Radix sort algorithm
-export const radixSort = (arr, order) => {
-  order = order.toString().toLowerCase();
-  const max = Math.max(...arr);
-  const min = Math.min(...arr);
-  const maxDigit = max.toString().length;
-  for (let i = 0; i < maxDigit; i++) {
-    const buckets = Array.from({ length: 10 }, () => []);
-    for (let j = 0; j < arr.length; j++) {
-      const digit = Math.floor((arr[j] - min) / 10 ** i) % 10;
-      buckets[digit].push(arr[j]);
-    }
-    arr = [].concat(...buckets);
-  }
-  return order === "asc" || order === "1" ? arr : arr.reverse();
-};
+// // Radix sort algorithm
+// export const radixSort = (arr, order) => {
+//   order = order.toString().toLowerCase();
+//   const max = Math.max(...arr);
+//   const min = Math.min(...arr);
+//   const maxDigit = max.toString().length;
+//   for (let i = 0; i < maxDigit; i++) {
+//     const buckets = Array.from({ length: 10 }, () => []);
+//     for (let j = 0; j < arr.length; j++) {
+//       const digit = Math.floor((arr[j] - min) / 10 ** i) % 10;
+//       buckets[digit].push(arr[j]);
+//     }
+//     arr = [].concat(...buckets);
+//   }
+//   return order === "asc" || order === "1" ? arr : arr.reverse();
+// };
 
-// Merge sort algorithm
-export const mergeSort = (arr, order) => {
-  order = order.toString().toLowerCase();
-  if (arr.length > 1) {
-    const middle = Math.floor(arr.length / 2);
-    const left = arr.slice(0, middle);
-    const right = arr.slice(middle);
-    return merge(mergeSort(left, order), mergeSort(right, order), order);
-  } else {
-    return arr;
-  }
-};
+// // Merge sort algorithm
+// export const mergeSort = (arr, order) => {
+//   order = order.toString().toLowerCase();
+//   if (arr.length > 1) {
+//     const middle = Math.floor(arr.length / 2);
+//     const left = arr.slice(0, middle);
+//     const right = arr.slice(middle);
+//     return merge(mergeSort(left, order), mergeSort(right, order), order);
+//   } else {
+//     return arr;
+//   }
+// };
 
-const merge = (left, right, order) => {
-  const result = [];
-  let leftIndex = 0;
-  let rightIndex = 0;
-  while (leftIndex < left.length && rightIndex < right.length) {
-    if (
-      order === "asc" || order === "1"
-        ? left[leftIndex] < right[rightIndex]
-        : left[leftIndex] > right[rightIndex]
-    ) {
-      result.push(left[leftIndex]);
-      leftIndex++;
-    } else {
-      result.push(right[rightIndex]);
-      rightIndex++;
-    }
-  }
-  return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
-};
+// const merge = (left, right, order) => {
+//   const result = [];
+//   let leftIndex = 0;
+//   let rightIndex = 0;
+//   while (leftIndex < left.length && rightIndex < right.length) {
+//     if (
+//       order === "asc" || order === "1"
+//         ? left[leftIndex] < right[rightIndex]
+//         : left[leftIndex] > right[rightIndex]
+//     ) {
+//       result.push(left[leftIndex]);
+//       leftIndex++;
+//     } else {
+//       result.push(right[rightIndex]);
+//       rightIndex++;
+//     }
+//   }
+//   return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
+// };
 
 // Description: This file contains the implementation of the sorting algorithms: bubble sort, quick sort, heap sort, counting sort, radix sort, and merge sort.
 // When to use which sorting algorithm?
@@ -258,78 +258,215 @@ const merge = (left, right, order) => {
 // We prefer counting sort and radix sort for integer data.
 // For smart sorting, we can use a combination of sorting algorithms based on the size of the dataset and the type of data.
 
-export const smartSort = (arr, options = {}) => {
-  const {
-    order = "asc",
-    type = "integer",
-    algorithm = "auto",
-    key = null,
-    threshold = { small: 100, large: 1000 },
-  } = options;
+// export const smartSort = (arr, options = {}) => {
+//   const {
+//     order = "asc",
+//     type = "integer",
+//     algorithm = "auto",
+//     key = null,
+//     threshold = { small: 100, large: 1000 },
+//   } = options;
 
-  const getValue = (item) => (key ? item[key] : item);
+//   const getValue = (item) => (key ? item[key] : item);
 
-  if (algorithm === "auto") {
-    if (type === "integer") {
-      if (arr.length < threshold.small) {
-        return countingSort(arr.map(getValue), order);
-      } else {
-        return radixSort(arr.map(getValue), order);
-      }
-    } else {
-      if (arr.length < threshold.large) {
-        return mergeSort(arr.map(getValue), order);
-      } else {
-        return quickSort(arr.map(getValue), order);
-      }
-    }
-  } else {
-    const sortAlgorithms = {
-      bubble: bubbleSort,
-      selection: selectionSort,
-      insertion: insertionSort,
-      merge: mergeSort,
-      quick: quickSort,
-      heap: heapSort,
-      counting: countingSort,
-      radix: radixSort,
-    };
+//   if (algorithm === "auto") {
+//     if (type === "integer") {
+//       if (arr.length < threshold.small) {
+//         return countingSort(arr.map(getValue), order);
+//       } else {
+//         return radixSort(arr.map(getValue), order);
+//       }
+//     } else {
+//       if (arr.length < threshold.large) {
+//         return mergeSort(arr.map(getValue), order);
+//       } else {
+//         return quickSort(arr.map(getValue), order);
+//       }
+//     }
+//   } else {
+//     const sortAlgorithms = {
+//       bubble: bubbleSort,
+//       selection: selectionSort,
+//       insertion: insertionSort,
+//       merge: mergeSort,
+//       quick: quickSort,
+//       heap: heapSort,
+//       counting: countingSort,
+//       radix: radixSort,
+//     };
 
-    if (!sortAlgorithms[algorithm]) {
-      throw new Error(`Invalid sorting algorithm: ${algorithm}`);
-    }
+//     if (!sortAlgorithms[algorithm]) {
+//       throw new Error(`Invalid sorting algorithm: ${algorithm}`);
+//     }
 
-    return sortAlgorithms[algorithm](arr.map(getValue), order);
-  }
-};
+//     return sortAlgorithms[algorithm](arr.map(getValue), order);
+//   }
+// };
 
 // Basic js sort
-export const basicSort = (arr, options = {}) => {
-  const { order = "asc", key = null } = options;
-  const getValue = (item) => (key ? item[key] : item);
-  return arr.sort((a, b) => {
-    const valueA = getValue(a);
-    const valueB = getValue(b);
-    return order === "asc" || order === "1" ? valueA - valueB : valueB - valueA;
-  });
-};
+// export const basicSort = (arr, options = {}) => {
+//   const { order = "asc", key = null } = options;
+//   const getValue = (item) => (key ? item[key] : item);
+//   return arr.sort((a, b) => {
+//     const valueA = getValue(a);
+//     const valueB = getValue(b);
+//     return order === "asc" || order === "1" ? valueA - valueB : valueB - valueA;
+//   });
+// };
 
 // Choose sort
-export const chooseSort = (arr, options = {}) => {
-  const { order = "asc", key = null, algorithm } = options;
-  const sortAlgorithms = {
-    bubble: bubbleSort,
-    selection: selectionSort,
-    insertion: insertionSort,
-    merge: mergeSort,
-    quick: quickSort,
-    heap: heapSort,
-    counting: countingSort,
-    radix: radixSort,
+// export const chooseSort = (arr, options = {}) => {
+//   const { order = "asc", key = null, algorithm } = options;
+//   const sortAlgorithms = {
+//     bubble: bubbleSort,
+//     selection: selectionSort,
+//     insertion: insertionSort,
+//     merge: mergeSort,
+//     quick: quickSort,
+//     heap: heapSort,
+//     counting: countingSort,
+//     radix: radixSort,
+//   };
+//   if (!sortAlgorithms[algorithm]) {
+//     throw new Error(`Invalid sorting algorithm: ${algorithm}`);
+//   } else {
+//     return sortAlgorithms[algorithm](arr, order);
+//   }
+// };
+
+export const smartSort = (data, options = {}) => {
+  options = Object.assign(
+    {
+      deepSort: true, // Whether to sort deeply nested structures
+      key: null, // Key to sort objects by
+      order: "asc", // 'asc' or 'desc'
+      threshold: 20, // Switch to insertion sort if size is below this
+      detectSortedness: true, // Optimize based on pre-sorted %
+    },
+    options
+  );
+
+  const sortArray = (arr) => {
+    if (arr.length === 0) return arr;
+
+    // Ensure sorting by key for objects
+    if (typeof arr[0] === "object" && options.key) {
+      return sortByKey(arr);
+    }
+
+    if (options.detectSortedness && isSorted(arr)) {
+      return options.order === "desc" ? arr.reverse() : arr;
+    }
+
+    if (arr.length < options.threshold) {
+      return insertionSort(arr);
+    } else if (isNearlySorted(arr)) {
+      return timSort(arr);
+    } else {
+      return quickSort(arr);
+    }
   };
-  if (!sortAlgorithms[algorithm]) {
-    throw new Error(`Invalid sorting algorithm: ${algorithm}`);
-  } else {
-    return sortAlgorithms[algorithm](arr, order);
+
+  const deepSort = (data) => {
+    if (Array.isArray(data)) {
+      return sortArray(data.map((item) => deepSort(item)));
+    } else if (typeof data === "object" && data !== null) {
+      for (let key in data) {
+        data[key] = deepSort(data[key]);
+      }
+    }
+    return data;
+  };
+
+  const sortObject = (obj) => {
+    if (!options.deepSort) return obj;
+    for (let key in obj) {
+      if (
+        Array.isArray(obj[key]) ||
+        (typeof obj[key] === "object" && obj[key] !== null)
+      ) {
+        obj[key] = deepSort(obj[key]);
+      }
+    }
+    return obj;
+  };
+
+  const getNestedValue = (obj, key) => {
+    return key
+      .replace(/\[([^\]]+)\]/g, ".$1") // Convert bracket notation to dot notation
+      .split(".") // Split into parts
+      .reduce((acc, part) => acc && acc[part], obj);
+  };
+
+  const compareValues = (a, b, keys, orders) => {
+    for (let i = 0; i < keys.length; i++) {
+      let key = keys[i];
+      let order = orders[i] || orders[0]; // Use order[i] if exists, else fallback to first order
+      let valueA = getNestedValue(a, key);
+      let valueB = getNestedValue(b, key);
+
+      if (valueA < valueB) return order === "asc" ? -1 : 1;
+      if (valueA > valueB) return order === "asc" ? 1 : -1;
+    }
+    return 0;
+  };
+
+  const sortByKey = (arr) => {
+    const keys = Array.isArray(options.key) ? options.key : [options.key];
+    const orders = Array.isArray(options.order)
+      ? options.order
+      : [options.order];
+    return arr.sort((a, b) => compareValues(a, b, keys, orders));
+  };
+
+  const quickSort = (arr) => {
+    if (arr.length <= 1) return arr;
+    let pivot = arr[arr.length - 1];
+    let left = [],
+      right = [];
+    for (let i = 0; i < arr.length - 1; i++) {
+      if (arr[i] < pivot) left.push(arr[i]);
+      else right.push(arr[i]);
+    }
+    return [...quickSort(left), pivot, ...quickSort(right)];
+  };
+
+  const insertionSort = (arr) => {
+    for (let i = 1; i < arr.length; i++) {
+      let key = arr[i],
+        j = i - 1;
+      while (j >= 0 && arr[j] > key) {
+        arr[j + 1] = arr[j];
+        j--;
+      }
+      arr[j + 1] = key;
+    }
+    return arr;
+  };
+
+  const timSort = (arr) => {
+    return arr.sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+  };
+
+  const isSorted = (arr) => {
+    for (let i = 1; i < arr.length; i++) {
+      if (arr[i - 1] > arr[i]) return false;
+    }
+    return true;
+  };
+
+  const isNearlySorted = (arr) => {
+    let sortedCount = 0;
+    for (let i = 1; i < arr.length; i++) {
+      if (arr[i - 1] <= arr[i]) sortedCount++;
+    }
+    return sortedCount / arr.length > 0.8;
+  };
+
+  if (Array.isArray(data)) {
+    return deepSort(data);
+  } else if (typeof data === "object" && data !== null) {
+    return sortObject(data);
   }
+  return data;
 };
