@@ -125,23 +125,3 @@ export const sublistSearch = (arr, target) => {
   }
   return -1;
 };
-
-//Smart search algorithms
-export const smartSearch = (arr, target, thresholds = { small: 100, large: 1000 }) => {
-  const { small, large } = thresholds;
-  if (arr.length < small) {
-    return linearSearch(arr, target);
-  } else if (arr.length < large) {
-    return binarySearch(arr, target);
-  } else {
-    return interpolationSearch(arr, target);
-  }
-}
-// when the algo is better than the built-in method
-// When the array is not sorted and the target value is the first element in the array, binary search is better than linear search.
-// When the array is sorted and the target value is the last element in the array, interpolation search is better than binary search.
-// When the array is sorted and the target value is the first element in the array, jump search is better than binary search.
-// When the array is sorted and the target value is the last element in the array, ternary search is better than binary search.
-// When the array is sorted and the target value is the first element in the array, exponential search is better than binary search.
-// When the array is sorted and the target value is the first element in the array, fibonacci search is better than binary search.
-// When the array is sorted and the target value is the first element in the array, sublist search is better than linear search.
