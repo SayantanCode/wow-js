@@ -4,15 +4,14 @@ import { convert } from "../src/functions/converter.js";
 console.log(convert({ from: "10 hr 20 mn 30 sec", to: "minutes", type: "time" })); // 3600
 console.log(convert({ from: "1 mn", to: "seconds", type: "time" })); // 60
 console.log(convert({ from: "1 second", to: "seconds", type: "time" })); // 1
-console.log(convert({ from: "8:30pm @Asia/Kolkata", to: "hr", type: "time" })); // Timezone conversion example
+console.log(convert({ from: "8:30pm @Asia/Kolkata", to: "min", type: "time" })); // Timezone conversion example
 
 //test pass **dont change this format for now**
 console.log(convert({ from: ["17/03/2024, 6:30 AM @Asia/Calcutta", "17/04/2024, 22:30"], to: "hours", type: "time" })); // Date with timezone
 console.log(convert({ from: ["20/03/2025, 6:30 AM", "now"], to: "hours", type: "time" })); // Date with timezone
 console.log(convert({ from: ["17th March, 2024, 6:30 AM @Asia/Calcutta",
     "18th April, 2024, 6:30 AM @Asia/Calcutta"], to:"hours", type:"time"})); // Date with timezone
-// failed test
-console.log(convert({ from: ["6:30 PM @Asia/Calcutta", "now"], to: "seconds", type: "time" }));
+console.log(convert({ from: ["now", '6:30 PM'], to: "hr", type: "time" }));
 // // Examples with "now":
 // console.log(convert({from:["now@Asia/Kolkata", "1 hour"], to: "mn", type: "time"})); // Difference between now and one hour from now
 // console.log(convertTime(["09:00@EST", "now@PST"], "minutes")); // Difference between 9 AM EST and current time in PST

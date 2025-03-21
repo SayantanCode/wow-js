@@ -9,55 +9,6 @@
  * @param {string} [timezone="UTC"] The timezone to use for timezone conversion.
  * @returns {number} The converted time in the requested output unit.
  */
-// const convertTime = (input, outputUnit = "seconds", timezone = "UTC") => {
-//     const timeUnits = {
-//         hr: 3600, hour: 3600, hours: 3600,
-//         min: 60, minute: 60, minutes: 60, mn: 60,
-//         sec: 1, second: 1, seconds: 1, sc: 1
-//     };
-
-//     // Normalize Input: Remove extra spaces & convert to lowercase
-//     let normalizedInput = input.replace(/\s+/g, " ").trim().toLowerCase();
-
-//     // Handle 12-hour AM/PM format & convert to 24-hour format
-//     const amPmRegex = /(am|pm)/i;
-//     let dateObj;
-//     if (amPmRegex.test(normalizedInput)) {
-//         dateObj = new Date(normalizedInput);
-//     } else {
-//         // Handle 24-hour format directly
-//         const timeMatch = normalizedInput.match(/(\d{1,2}):(\d{2}):?(\d{2})?/);
-//         if (timeMatch) {
-//             let [_, hh, mm, ss] = timeMatch.map(Number);
-//             if (isNaN(ss)) ss = 0; // Default seconds to 0 if not provided
-//             dateObj = new Date();
-//             dateObj.setHours(hh, mm, ss, 0);
-//         }
-//     }
-
-//     // Handle direct time units (e.g., "12 hr 30 min 10 sec")
-//     let totalSeconds = 0;
-//     const regex = /(\d+)\s*(hr|hour|hours|min|minute|minutes|mn|sec|second|seconds|sc)/gi;
-//     let match;
-//     while ((match = regex.exec(normalizedInput)) !== null) {
-//         totalSeconds += Number(match[1]) * timeUnits[match[2].toLowerCase()];
-//     }
-
-//     // If a valid Date object is created, consider timezone conversion
-//     if (dateObj && !isNaN(dateObj.getTime())) {
-//         const utcDate = new Date(dateObj.toLocaleString("en-US", { timeZone: timezone }));
-//         totalSeconds = (utcDate.getHours() * 3600) + (utcDate.getMinutes() * 60) + utcDate.getSeconds();
-//     }
-
-//     // Convert totalSeconds to the requested output unit
-//     const conversionMap = {
-//         hours: totalSeconds / 3600,
-//         minutes: totalSeconds / 60,
-//         seconds: totalSeconds
-//     };
-
-//     return conversionMap[outputUnit] || totalSeconds;
-// };
 
 // Examples:
 // console.log(convertTime("12 hr 30 min 10 sec", "seconds")); // 45010
@@ -93,27 +44,27 @@ const DATE_PATTERNS = [
   },
   {
     regex:
-      /^(\d{1,2})(st|nd|rd|th)?\s+([A-Za-z]+),?\s+(\d{4}),?\s+(\d{1,2}:\d{2}\s?(?:AM|PM|A.M.|P.M.|Am|Pm|A.m|P.m|am|pm|a.m.|p.m.|a.m|p.m)?)?$/,
+      /^(\d{1,2})(st|nd|rd|th)?\s+([A-Za-z]+),?\s+(\d{4}),?\s+(\d{1,2}:\d{2}\s?(?:AM|PM|Am|Pm|am|pm)?)?$/,
     format: "Ordinal Date with Year",
   },
   {
     regex:
-      /^([A-Za-z]+)\s+(\d{1,2}),?\s+(\d{4}),?\s+(\d{1,2}:\d{2}\s?(?:AM|PM|A.M.|P.M.|Am|Pm|A.m|P.m|am|pm|a.m.|p.m.|a.m|p.m)?)?$/,
+      /^([A-Za-z]+)\s+(\d{1,2}),?\s+(\d{4}),?\s+(\d{1,2}:\d{2}\s?(?:AM|PM|Am|Pm|am|pm)?)?$/,
     format: "Month First Format",
   },
   {
     regex:
-      /^(\d{2})\/(\d{2})\/(\d{4}),?\s+(\d{1,2}:\d{2}\s?(?:AM|PM|A.M.|P.M.|Am|Pm|A.m|P.m|am|pm|a.m.|p.m.|a.m|p.m)?)?$/,
+      /^(\d{2})\/(\d{2})\/(\d{4}),?\s+(\d{1,2}:\d{2}\s?(?:AM|PM|Am|Pm|am|pm)?)?$/,
     format: "DD/MM/YYYY Format",
   },
   {
     regex:
-      /^(\d{4})-(\d{2})-(\d{2})\s+(\d{1,2}:\d{2}\s?(?:AM|PM|A.M.|P.M.|Am|Pm|A.m|P.m|am|pm|a.m.|p.m.|a.m|p.m)?)?$/,
+      /^(\d{4})-(\d{2})-(\d{2})\s+(\d{1,2}:\d{2}\s?(?:AM|PM|Am|Pm|am|pm)?)?$/,
     format: "YYYY-MM-DD Format",
   },
   {
     regex:
-      /^(\d{1,2}:\d{2}\s?(?:AM|PM|A.M.|P.M.|Am|Pm|A.m|P.m|am|pm|a.m.|p.m.|a.m|p.m)?)$/,
+      /^(\d{1,2}:\d{2}\s?(?:AM|PM|Am|Pm|am|pm)?)$/,
     format: "Only Time Format",
   },
   {
@@ -207,7 +158,7 @@ const calculateTimeDifference = ([startInput, endInput], unit) => {
 
   const startDateTime = parseDateTime(startInput, startZone);
   const endDateTime = parseDateTime(endInput, endZone);
-  //   console.log(`startDateTime: ${startDateTime}, endDateTime: ${endDateTime}`);
+    // console.log(`startDateTime: ${startDateTime}, endDateTime: ${endDateTime}`);
   let diffMs = endDateTime - startDateTime;
 
   switch (unit) {
@@ -274,6 +225,59 @@ const calculateTimeDifference = ([startInput, endInput], unit) => {
   }
 };
 
+const parseDateTimeString = (dateTimeString) => {
+    let normalizedInput = dateTimeString.replace(/\s+/g, " ").trim();
+
+    if (normalizedInput.toLowerCase() === "now") {
+        // Get current time
+        const now = new Date();
+        const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+        return Math.floor((now - midnight) / 1000); // Seconds since midnight
+    }
+
+    // Handle time formats like "08:00PM@Asia/Kolkata"
+    const timeMatch = normalizedInput.match(
+        /(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?\s*(?:@([a-zA-Z/_]+))?/i
+    );
+
+    if (timeMatch) {
+        let [_, hh, mm, ss, period] = timeMatch;
+        hh = Number(hh);
+        mm = Number(mm);
+        ss = ss ? Number(ss) : 0;
+
+        if (period) {
+            if (period.toUpperCase() === "PM" && hh < 12) hh += 12;
+            if (period.toUpperCase() === "AM" && hh === 12) hh = 0;
+        }
+
+        const midnight = new Date();
+        midnight.setHours(0, 0, 0, 0); // Midnight today
+
+        const dateObj = new Date(midnight);
+        dateObj.setHours(hh, mm, ss);
+
+        return Math.floor((dateObj - midnight) / 1000); // Seconds since midnight
+    }
+
+    // Handle durations like "2 hours 30 minutes"
+    const timeUnits = {
+        hr: 3600, hour: 3600, hours: 3600,
+        min: 60, minute: 60, minutes: 60, mn: 60,
+        sec: 1, second: 1, seconds: 1, sc: 1
+    };
+
+    const durationMatch = normalizedInput.match(/(\d+)\s*(hr|hour|hours|min|minute|minutes|mn|sec|second|seconds|sc)/gi);
+    if (durationMatch) {
+        return durationMatch.reduce((total, match) => {
+            let [value, unit] = match.split(/\s+/);
+            return total + Number(value) * timeUnits[unit];
+        }, 0);
+    }
+
+    return NaN;
+};
+
 // ✅ **Fixed Test Cases**
 // console.log(calculateTimeDifference([
 //     "6:30 AM", // No date, assumes today
@@ -331,83 +335,12 @@ const convertTime = (input, outputUnit = "seconds") => {
     sc: 1,
   };
 
-  const parseDateTimeString = (dateTimeString, timezone = "UTC") => {
-    let normalizedInput = dateTimeString.replace(/\s+/g, " ").trim();
+  
 
-    if (normalizedInput.toLowerCase() === "now") {
-      return Math.floor(new Date().getTime() / 1000); // Current UTC timestamp
-    }
-
-    let dateObj = new Date(normalizedInput);
-    if (!isNaN(dateObj.getTime())) {
-      try {
-        const utcDate = new Date(
-          dateObj.toLocaleString("en-US", { timeZone: timezone })
-        );
-        return Math.floor(utcDate.getTime() / 1000);
-      } catch (error) {
-        console.error("Error converting to timezone:", error);
-        return NaN;
-      }
-    }
-
-    // Handle time formats like "08:00PM@Asia/Kolkata"
-    const timeMatch = normalizedInput.match(
-      /(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?\s*(?:@([a-zA-Z/_]+))?/i
-    );
-    if (timeMatch) {
-      let [_, hh, mm, ss, period, tz] = timeMatch;
-      hh = Number(hh);
-      mm = Number(mm);
-      ss = ss ? Number(ss) : 0;
-      if (period) {
-        if (period.toUpperCase() === "PM" && hh < 12) hh += 12;
-        if (period.toUpperCase() === "AM" && hh === 12) hh = 0;
-      }
-      const now = new Date();
-      dateObj = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate(),
-        hh,
-        mm,
-        ss
-      );
-      const finalTimezone = tz || timezone;
-      const utcDate = new Date(
-        dateObj.toLocaleString("en-US", { timeZone: finalTimezone })
-      );
-      return Math.floor(utcDate.getTime() / 1000);
-    }
-
-    // Handle durations like "2 hours 30 minutes"
-    const durationMatch = normalizedInput.match(
-      /(\d+)\s*(hr|hour|hours|min|minute|minutes|mn|sec|second|seconds|sc)/gi
-    );
-    if (durationMatch) {
-      return durationMatch.reduce((total, match) => {
-        let [value, unit] = match.split(/\s+/);
-        return total + Number(value) * timeUnits[unit];
-      }, 0);
-    }
-    return NaN;
-  };
 
   let totalSeconds = 0;
 
   if (Array.isArray(input) && input.length === 2) {
-    // const [startTimeInput, endTimeInput] = input;
-    // let [startTime, startTimezone] = startTimeInput.split('@').map(s => s.trim());
-    // let [endTime, endTimezone] = endTimeInput.split('@').map(s => s.trim());
-
-    // startTimezone = startTimezone || "UTC";
-    // endTimezone = endTimezone || "UTC";
-
-    // const startTimestamp = parseDateTimeString(startTime, startTimezone);
-    // const endTimestamp = parseDateTimeString(endTime, endTimezone);
-    // if (!isNaN(startTimestamp) && !isNaN(endTimestamp)) {
-    //     totalSeconds = endTimestamp - startTimestamp;
-    // }
     return calculateTimeDifference(input, outputUnit);
   } else if (typeof input === "string") {
     totalSeconds = parseDateTimeString(input);
@@ -477,7 +410,7 @@ const convertTime = (input, outputUnit = "seconds") => {
  * due to their non-linear nature. The input value must be a string in the format "{number} {unit}".
  */
 
-const convertBasic = (inputValue, toUnit) => {
+const convertBasic = (inputValue, toUnit, withUnits=false) => {
   const conversions = {
     length: {
       meter: 1,
@@ -551,13 +484,13 @@ const convertBasic = (inputValue, toUnit) => {
     const toUnitLower = toUnit.toLowerCase();
     if (!(toUnitLower in conversions.temperature))
       return "Invalid temperature unit";
-    return conversions.temperature[fromUnit](value, toUnitLower);
+    return conversions.temperature[fromUnit](value, toUnitLower) + (withUnits ? ` ${toUnit}` : '');
   }
 
   const toUnitLower = toUnit.toLowerCase();
   if (!(toUnitLower in conversions[type])) return "Invalid target unit";
 
-  return (value / conversions[type][fromUnit]) * conversions[type][toUnitLower];
+  return (value / conversions[type][fromUnit]) * conversions[type][toUnitLower] + (withUnits ? ` ${toUnit}` : '');
 };
 
 // Examples
@@ -568,9 +501,9 @@ const convertBasic = (inputValue, toUnit) => {
 
 // Main converter function which can handle both basic and time conversions
 export const convert = (options) => {
-  const { from, to, type = "basic" } = options;
-  if (type === "basic") return convertBasic(from, to);
-  if (type === "time") return convertTime(from, to);
+  const { from, to, type = "basic", withUnits = false } = options;
+  if (type === "basic") return convertBasic(from, to, withUnits);
+  if (type === "time") return convertTime(from, to, withUnits);
   return "Invalid conversion type";
 };
 
