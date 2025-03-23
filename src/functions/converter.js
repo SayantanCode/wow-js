@@ -149,7 +149,7 @@ const parseDateTime = (input, defaultZone = "UTC", referenceDate = new Date()) =
   return new Date(dateObj.toLocaleString("en-US", { timeZone }));
 };
 
-const calculateTimeDifference = ([startInput, endInput], unit) => {
+const calculateTimeDifference = ([startInput, endInput], unit, withUnits=false) => {
   let startZone = startInput.match(TIMEZONE_REGEX)?.[1] || "UTC";
   let endZone = endInput.match(TIMEZONE_REGEX)?.[1] || startZone;
 
@@ -163,61 +163,65 @@ const calculateTimeDifference = ([startInput, endInput], unit) => {
 
   switch (unit) {
     case "years":
-      return endDateTime.getFullYear() - startDateTime.getFullYear();
+      return withUnits ? `${endDateTime.getFullYear() - startDateTime.getFullYear()} years` : endDateTime.getFullYear() - startDateTime.getFullYear();
     case "year":
-      return endDateTime.getFullYear() - startDateTime.getFullYear();
+      return withUnits ? `${endDateTime.getFullYear() - startDateTime.getFullYear()} year` : endDateTime.getFullYear() - startDateTime.getFullYear();
     case "yrs":
-      return endDateTime.getFullYear() - startDateTime.getFullYear();
+      return withUnits ? `${endDateTime.getFullYear() - startDateTime.getFullYear()} yrs` : endDateTime.getFullYear() - startDateTime.getFullYear();
     case "yr":
-      return endDateTime.getFullYear() - startDateTime.getFullYear();
+      return withUnits ? `${endDateTime.getFullYear() - startDateTime.getFullYear()} yr` : endDateTime.getFullYear() - startDateTime.getFullYear();
     case "months":
       return (
+        withUnits ? `${(endDateTime.getFullYear() - startDateTime.getFullYear()) * 12 + (endDateTime.getMonth() - startDateTime.getMonth())} months` :
         (endDateTime.getFullYear() - startDateTime.getFullYear()) * 12 +
         (endDateTime.getMonth() - startDateTime.getMonth())
       );
     case "month":
       return (
+        withUnits ? `${(endDateTime.getFullYear() - startDateTime.getFullYear()) * 12 + (endDateTime.getMonth() - startDateTime.getMonth())} month` :
         (endDateTime.getFullYear() - startDateTime.getFullYear()) * 12 +
         (endDateTime.getMonth() - startDateTime.getMonth())
       );
     case "mths":
       return (
+        withUnits ? `${(endDateTime.getFullYear() - startDateTime.getFullYear()) * 12 + (endDateTime.getMonth() - startDateTime.getMonth())} mths` :
         (endDateTime.getFullYear() - startDateTime.getFullYear()) * 12 +
         (endDateTime.getMonth() - startDateTime.getMonth())
       );
     case "mth":
       return (
+        withUnits ? `${(endDateTime.getFullYear() - startDateTime.getFullYear()) * 12 + (endDateTime.getMonth() - startDateTime.getMonth())} mth` :
         (endDateTime.getFullYear() - startDateTime.getFullYear()) * 12 +
         (endDateTime.getMonth() - startDateTime.getMonth())
       );
     case "days":
-      return diffMs / (1000 * 60 * 60 * 24);
+      return withUnits ? `${diffMs / (1000 * 60 * 60 * 24)} days` : diffMs / (1000 * 60 * 60 * 24);
     case "day":
-      return diffMs / (1000 * 60 * 60 * 24);
+      return withUnits ? `${diffMs / (1000 * 60 * 60 * 24)} day` : diffMs / (1000 * 60 * 60 * 24);
     case "dys":
-      return diffMs / (1000 * 60 * 60 * 24);
+      return withUnits ? `${diffMs / (1000 * 60 * 60 * 24)} dys` : diffMs / (1000 * 60 * 60 * 24);
     case "dy":
-      return diffMs / (1000 * 60 * 60 * 24);
+      return withUnits ? `${diffMs / (1000 * 60 * 60 * 24)} dy` : diffMs / (1000 * 60 * 60 * 24);
     case "hours":
-      return diffMs / (1000 * 60 * 60);
+      return withUnits ? `${diffMs / (1000 * 60 * 60)} hours` : diffMs / (1000 * 60 * 60);
     case "hour":
-      return diffMs / (1000 * 60 * 60);
+      return withUnits ? `${diffMs / (1000 * 60 * 60)} hour` : diffMs / (1000 * 60 * 60);
     case "hr":
-      return diffMs / (1000 * 60 * 60);
+      return withUnits ? `${diffMs / (1000 * 60 * 60)} hr` : diffMs / (1000 * 60 * 60);
     case "minutes":
-      return diffMs / (1000 * 60);
+      return withUnits ? `${diffMs / (1000 * 60)} minutes` : diffMs / (1000 * 60);
     case "minute":
-      return diffMs / (1000 * 60);
+      return withUnits ? `${diffMs / (1000 * 60)} minute` : diffMs / (1000 * 60);
     case "min":
-      return diffMs / (1000 * 60);
+      return withUnits ? `${diffMs / (1000 * 60)} min` : diffMs / (1000 * 60);
     case "seconds":
-      return diffMs / 1000;
+      return withUnits ? `${diffMs / 1000} seconds` : diffMs / 1000;
     case "second":
-      return diffMs / 1000;
+      return withUnits ? `${diffMs / 1000} second` : diffMs / 1000;
     case "sec":
-      return diffMs / 1000;
+      return withUnits ? `${diffMs / 1000} sec` : diffMs / 1000;
     case "sc":
-      return diffMs / 1000;
+      return withUnits ? `${diffMs / 1000} sc` : diffMs / 1000;
     default:
       throw new Error(
         "Invalid unit. Choose from: years, months, days, hours, minutes, seconds."
@@ -320,7 +324,7 @@ const parseDateTimeString = (dateTimeString) => {
 //     "17/03/2024, 22:30"
 // ], 'hours'));
 
-const convertTime = (input, outputUnit = "seconds") => {
+const convertTime = (input, outputUnit = "seconds", withUnits = false) => {
   const timeUnits = {
     hr: 3600,
     hour: 3600,
@@ -341,7 +345,7 @@ const convertTime = (input, outputUnit = "seconds") => {
   let totalSeconds = 0;
 
   if (Array.isArray(input) && input.length === 2) {
-    return calculateTimeDifference(input, outputUnit);
+    return calculateTimeDifference(input, outputUnit, withUnits);
   } else if (typeof input === "string") {
     totalSeconds = parseDateTimeString(input);
   }
@@ -360,7 +364,7 @@ const convertTime = (input, outputUnit = "seconds") => {
     sc: totalSeconds,
     seconds: totalSeconds,
   };
-  return conversionMap[outputUnit.toLowerCase()] || totalSeconds;
+  return conversionMap[outputUnit.toLowerCase()] + (withUnits ? ` ${outputUnit.toLowerCase()}` : "") || totalSeconds + (withUnits ? ` ${outputUnit.toLowerCase()}` : "");
 };
 
 // Test cases
